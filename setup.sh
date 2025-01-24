@@ -37,7 +37,7 @@ done
 echo "Updating package list and installing $PROGRAM..."
 sudo apt update  # Requests sudo for updating packages
 sudo apt install "$PROGRAM"  # Requests sudo for installing the program
-curl -sL install-node.vercel.app/lts | bash  # Updates nodejs so that coc.vim works 
+curl -sL install-node.vercel.app/lts | sudo bash  # Updates nodejs so that coc.vim works 
 
 echo "Setup completed successfully!"
 
