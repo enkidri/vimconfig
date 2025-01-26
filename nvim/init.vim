@@ -34,7 +34,7 @@ set expandtab
 set autoindent 
 set smartindent 
 syntax enable on
-set clipboard=unnamedplus 
+set clipboard+=unnamedplus 
 set cursorline 
 set laststatus=2
 colorscheme gruvbox
@@ -44,6 +44,13 @@ set cc=80
 set tabstop=2 " Google style compliance
 set shiftwidth=2 " Google style compliance
 set autoread    " Reads text after switching branch
+set signcolumn=yes  " Always show the sign column to prevent jumps while typing
+
+" ---------- General remapping -------------------
+
+" Resize panes using Ctrl + Left/Right
+nnoremap <C-Left> :vertical resize -2<CR>
+nnoremap <C-Right> :vertical resize +2<CR>
  
 " -------- NERDTree settings -------------------
 map <C-n> :NERDTreeToggle<CR>
