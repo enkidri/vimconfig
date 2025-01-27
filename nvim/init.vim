@@ -20,6 +20,7 @@ Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-commentary'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'tpope/vim-fugitive'         " Git commands
+Plug 'lukas-reineke/indent-blankline.nvim' "Indent guides
 
 call plug#end() 
 
@@ -51,7 +52,7 @@ set signcolumn=yes  " Always show the sign column to prevent jumps while typing
 " Resize panes using Ctrl + Left/Right
 nnoremap <C-Left> :vertical resize -2<CR>
 nnoremap <C-Right> :vertical resize +2<CR>
- 
+
 " -------- NERDTree settings -------------------
 map <C-n> :NERDTreeToggle<CR>
 
@@ -119,3 +120,6 @@ let g:lightline = {
 " Enable treesitter highlighting syntax
 "
 lua require'nvim-treesitter.configs'.setup{highlight={enable=true}}
+
+"-----------Indent blanklines------------------
+lua require("ibl").setup()
