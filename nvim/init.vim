@@ -21,6 +21,7 @@ Plug 'tpope/vim-commentary'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'tpope/vim-fugitive'         " Git commands
 Plug 'lukas-reineke/indent-blankline.nvim' "Indent guides
+Plug 'tpope/vim-obsession'        " Save session :Obsess on, :Obsess! off
 
 call plug#end() 
 
@@ -56,7 +57,7 @@ nnoremap <C-Right> :vertical resize +2<CR>
 " -------- NERDTree settings -------------------
 map <C-n> :NERDTreeToggle<CR>
 
-" COC VIM settings
+"------------COC VIM settings-------------------
 let g:coc_global_extensions = ['coc-clangd']
 " Tab completation
 inoremap <silent><expr> <TAB>
@@ -103,6 +104,19 @@ if has('nvim-0.4.0') || has('patch-8.2.0750')
   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 
+" Use K to show documentation in preview window
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" coc-clangd specific mapping
+nnoremap <silent> S :CocCommand clangd.switchSourceHeader<CR>
 
 " -----------LIGHTLINE SETTINGS----------------
 let g:lightline = {
