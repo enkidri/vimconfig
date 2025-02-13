@@ -22,6 +22,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'tpope/vim-fugitive'         " Git commands
 Plug 'lukas-reineke/indent-blankline.nvim' "Indent guides
 Plug 'tpope/vim-obsession'        " Save session :Obsess on, :Obsess! off
+Plug 'RRethy/vim-illuminate'      " Illuminates word under cursor
 
 call plug#end() 
 
@@ -39,7 +40,6 @@ syntax enable on
 set clipboard+=unnamedplus 
 set cursorline 
 set laststatus=2
-colorscheme gruvbox
 set path=/usr/include
 set t_vb=
 set cc=80
@@ -47,15 +47,43 @@ set tabstop=2 " Google style compliance
 set shiftwidth=2 " Google style compliance
 set autoread    " Reads text after switching branch
 set signcolumn=yes  " Always show the sign column to prevent jumps while typing
+set updatetime=300
+autocmd FileType c,cpp,cc,h setlocal commentstring=//\ %s " Set commenting style
+
+" let g:ale_enabled = 0
 
 " ---------- General remapping -------------------
 
 " Resize panes using Ctrl + Left/Right
-nnoremap <C-Left> :vertical resize -2<CR>
-nnoremap <C-Right> :vertical resize +2<CR>
+nnoremap <C-h> :vertical resize -2<CR>
+nnoremap <C-l> :vertical resize +2<CR>
+nnoremap <F5> :%s/\r//<CR>
 
 " -------- NERDTree settings -------------------
-map <C-n> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+
+let NERDTreeShowHidden=1
+let NERDTreeShowLineNumbers=1
+
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":quit\<CR>:\<BS>") | endif
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":quit\<CR>:\<BS>") | endif
+
+"--------- Colorscheme settings ----------------
+set termguicolors
+colorscheme gruvbox
+let g:gruvbox_transparent_bg=1
+autocmd VimEnter * hi Normal ctermbg=NONE guibg=NONE
+highlight Normal guibg=NONE ctermbg=NONE
+
+"------------ ALE -----------------------------
+let g:ale_linters = {
+    \ 'c': ['clangd'],
+    \ 'cpp': ['clangd'],
+\}
+let g:ale_disable_lsp = 1
 
 "------------COC VIM settings-------------------
 let g:coc_global_extensions = ['coc-clangd']
@@ -94,15 +122,22 @@ nmap <leader>rn <Plug>(coc-rename)
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
+" Remap keys for applying code actions at the cursor position
+nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+" Remap keys for apply code actions affect whole buffer
+nmap <leader>as  <Plug>(coc-codeaction-source)
+" " Apply the most preferred quickfix action to fix diagnostic on the current line
+" nmap <leader>qf  <Plug>(coc-fix-current)
+
 " Remap <C-f> and <C-b> to scroll float windows/popups
-if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-endif
+" if has('nvim-0.4.0') || has('patch-8.2.0750')
+"   nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+"   nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+"   inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+"   inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+"   vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+"   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+" endif
 
 " Use K to show documentation in preview window
 nnoremap <silent> K :call ShowDocumentation()<CR>
@@ -137,3 +172,47 @@ lua require'nvim-treesitter.configs'.setup{highlight={enable=true}}
 
 "-----------Indent blanklines------------------
 lua require("ibl").setup()
+
+"-----------Vim Illuminates------------------
+lua << EOF
+require('illuminate').configure({
+    providers = {
+        'lsp',
+        'treesitter',
+        'regex',
+    },
+    delay = 0,
+    filetype_overrides = {},
+    filetypes_denylist = {
+        'dirbuf',
+        'dirvish',
+        'fugitive',
+    },
+    filetypes_allowlist = {},
+    modes_denylist = {},
+    modes_allowlist = {},
+    providers_regex_syntax_denylist = {},
+    providers_regex_syntax_allowlist = {},
+    under_cursor = false,
+    large_file_cutoff = 10000,
+    large_file_overrides = nil,
+    min_count_to_highlight = 1,
+    should_enable = function(bufnr) return true end,
+    case_insensitive_regex = false,
+    disable_keymaps = false,
+})
+  -- change the highlight style
+  vim.api.nvim_set_hl(0, "IlluminatedWordText", { link = "Visual" })
+  vim.api.nvim_set_hl(0, "IlluminatedWordRead", { link = "Visual" })
+  vim.api.nvim_set_hl(0, "IlluminatedWordWrite", { link = "Visual" })
+  
+  --- auto update the highlight style on colorscheme change
+  vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+    pattern = { "*" },
+    callback = function(ev)
+      vim.api.nvim_set_hl(0, "IlluminatedWordText", { link = "Visual" })
+      vim.api.nvim_set_hl(0, "IlluminatedWordRead", { link = "Visual" })
+      vim.api.nvim_set_hl(0, "IlluminatedWordWrite", { link = "Visual" })
+    end
+})
+EOF
