@@ -79,11 +79,8 @@ autocmd VimEnter * hi Normal ctermbg=NONE guibg=NONE
 highlight Normal guibg=NONE ctermbg=NONE
 
 "------------ ALE -----------------------------
-let g:ale_linters = {
-    \ 'c': ['clangd'],
-    \ 'cpp': ['clangd'],
-\}
-let g:ale_disable_lsp = 1
+let g:ale_disable_lsp = 1 " This is absolutely NEEDED to avoid conflicts with coc-nvim
+let g:ale_enabled = 1
 
 "------------COC VIM settings-------------------
 let g:coc_global_extensions = ['coc-clangd']
@@ -127,7 +124,7 @@ nmap <leader>ac  <Plug>(coc-codeaction-cursor)
 " Remap keys for apply code actions affect whole buffer
 nmap <leader>as  <Plug>(coc-codeaction-source)
 " " Apply the most preferred quickfix action to fix diagnostic on the current line
-" nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Remap <C-f> and <C-b> to scroll float windows/popups
 " if has('nvim-0.4.0') || has('patch-8.2.0750')
