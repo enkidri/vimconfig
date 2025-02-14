@@ -9,7 +9,6 @@ endif
 call plug#begin('~/.vim/plugged') 
 " C++ related plugins 
 Plug 'scrooloose/nerdtree'        " File explorer 
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " Fuzzy finder 
 Plug 'junegunn/fzf.vim'           " FZF commands for Vim 
 Plug 'itchyny/lightline.vim'      " Lightweight satusline 
@@ -81,7 +80,6 @@ highlight Normal guibg=NONE ctermbg=NONE
 "------------ ALE -----------------------------
 let g:ale_disable_lsp = 1 " This is absolutely NEEDED to avoid conflicts with coc-nvim
 let g:ale_enabled = 1
-let g:ale_use_neovim_diagnostics_api = 1
 
 "------------COC VIM settings-------------------
 let g:coc_global_extensions = ['coc-clangd']
