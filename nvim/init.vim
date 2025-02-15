@@ -22,6 +22,7 @@ Plug 'tpope/vim-fugitive'         " Git commands
 Plug 'lukas-reineke/indent-blankline.nvim' "Indent guides
 Plug 'tpope/vim-obsession'        " Save session :Obsess on, :Obsess! off
 Plug 'RRethy/vim-illuminate'      " Illuminates word under cursor
+Plug 'ggandor/leap.nvim'          " Simplified vim motions
 
 call plug#end() 
 
@@ -147,7 +148,7 @@ function! ShowDocumentation()
 endfunction
 
 " coc-clangd specific mapping
-nnoremap <silent> S :CocCommand clangd.switchSourceHeader<CR>
+nnoremap <silent> <C-s> :CocCommand clangd.switchSourceHeader<CR>
 
 " -----------LIGHTLINE SETTINGS----------------
 let g:lightline = {
@@ -240,3 +241,6 @@ require('illuminate').configure({
     end
 })
 EOF
+
+"--------- NVIM LEAP--------------------------
+lua require('leap').create_default_mappings()
