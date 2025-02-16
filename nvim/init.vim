@@ -23,6 +23,7 @@ Plug 'lukas-reineke/indent-blankline.nvim' "Indent guides
 Plug 'tpope/vim-obsession'        " Save session :Obsess on, :Obsess! off
 Plug 'RRethy/vim-illuminate'      " Illuminates word under cursor
 Plug 'ggandor/leap.nvim'          " Simplified vim motions
+Plug 'tpope/vim-surround'         " Easily surround text with whatever symbol
 
 call plug#end() 
 
