@@ -39,18 +39,18 @@ set smartindent
 syntax enable on
 set clipboard+=unnamedplus 
 set cursorline 
+set cursorcolumn
 set laststatus=2
 set path=/usr/include
-set t_vb=
+set t_vb= " Turns off the bell sound
 set cc=80
 set tabstop=2 " Google style compliance
 set shiftwidth=2 " Google style compliance
 set autoread    " Reads text after switching branch
 set signcolumn=yes  " Always show the sign column to prevent jumps while typing
 set updatetime=300
+set hidden          " Prevent coc nvim freezing
 autocmd FileType c,cpp,cc,h setlocal commentstring=//\ %s " Set commenting style
-
-" let g:ale_enabled = 0
 
 " ---------- General remapping -------------------
 
@@ -83,7 +83,7 @@ let g:ale_disable_lsp = 1 " This is absolutely NEEDED to avoid conflicts with co
 let g:ale_enabled = 1
 
 "------------COC VIM settings-------------------
-let g:coc_global_extensions = ['coc-clangd']
+let g:coc_global_extensions = ['coc-clangd', 'coc-json', 'coc-prettier']
 " Tab completation
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
@@ -165,7 +165,14 @@ let g:lightline = {
 " ----------TREESITTER SETTINGS---------------
 " Enable treesitter highlighting syntax
 "
-lua require'nvim-treesitter.configs'.setup{highlight={enable=true}}
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { 'c', 'cpp', 'vim', 'vimdoc', 'bash', 'python', 'yaml' },
+  sync_install = false,
+  auto_install = true,
+  highlight = { enable = true }
+}
+EOF
 
 "-----------Indent blanklines------------------
 " lua require("ibl").setup()
