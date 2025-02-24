@@ -37,6 +37,8 @@ set relativenumber
 set expandtab 
 set autoindent 
 set smartindent 
+set ignorecase
+set smartcase " case insensetive search if search input all lowercase. Depend: ignorecase
 syntax enable on
 set clipboard+=unnamedplus 
 set cursorline 
